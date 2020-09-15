@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Main</title>
+<link rel="stylesheet" href="./css/bootstrap.min.css">
+</head>
+
+<body>
+<script src="./js/jquery.js"></script>
+<script src="./js/popper.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="./">BOARD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="./">Home </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="dropdown" data-toggle="dropdown" >MEMBER</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown">
+          <a class="dropdown-item" href="#">LOGIN</a>
+          <a class="dropdown-item" href="#">LOGOUT</a>
+          <a class="dropdown-item" href="#">SIGN UP</a>
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<div style="height:100px;"></div>
+
+<div class="listdiv" style="width:70%; height:100%; margin:auto;">
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Title</th>
+      <th scope="col">Writer</th>
+    </tr>
+  </thead>
+  <tbody>
+			<tr th:each="data,iterStat: ${result}">
+				<td th:text="${iterStat.index+1}"></td>
+				<td><a th:href="@{${data.id}+'/view'}" th:text="${data.title}"></a></td>
+				<td th:text="${data.writer}"></td>
+				
+			</tr>
+			</tbody>
+	</table>
+	<br></br>
+
+<div class="button" align="right" style="margin-right:25px;" >
+			<input type="button" class="btn btn-secondary disabled" value="write" onClick="location.href='/write'" ><br></br>
+			</div>
+	
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.cb.user.dao.UserDAO">
+
+
+	<select id="selectUserList"
+		parameterType="com.java.cb.user.vo.User"
+		resultType="com.java.cb.user.vo.User">
+		select *
+		from person
+	</select>
+
+	<insert id="writerBoard">
+		insert into person (id,
+		title, content, writer )
+		values ((select nvl(max(id)+1,1) from person),
+		#{title}, #{content},
+		#{writer})
+	</insert>
+
+<select id="viewBoard" parameterType="com.java.cb.user.vo.User" resultType="com.java.cb.user.vo.User">
+	select * from person where id=#{id}
+</select>
+
+<delete id="boardDelete"
+		>
+		delete from person where id=#{id}
+</delete>
+
+<update id="boardUpdate" parameterType="com.java.cb.user.vo.User">
+		update person
+		   set title=#{title}
+		      ,writer=#{writer}
+		      ,content=#{content}
+		where id=#{id}
+</update>
+
+</mapper>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+	<script src="/js/jquery.js"></script>
+	<script src="/js/popper.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="/">BOARD</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarColor02">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarColor02">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link" href="/">Home
+				</a></li>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" id="dropdown"
+					data-toggle="dropdown">MEMBER</a>
+					<div class="dropdown-menu" aria-labelledby="dropdown">
+						<a class="dropdown-item" href="#">LOGIN</a> <a
+							class="dropdown-item" href="#">LOGOUT</a> <a
+							class="dropdown-item" href="#">SIGN UP</a>
+					</div></li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0">
+				<input class="form-control mr-sm-2" type="text" placeholder="Search">
+				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		</div>
+	</nav>
+	<br>
+	<div style="width: 70%; height: 100%; margin: auto;">
+		<legend style="text-align: left;">MODIFY</legend>
+		<br>
+		<form name="update" method="post"
+			th:action="@{'/'+${result.id}+'/update.do'}">
+			<div>
+				TITLE<input class="form-control form-control-sm" name="title"
+					id="title" th:value="${result.title}" size="100">
+			</div>
+			<br>
+			<div>
+				CONTENT
+				<textarea class="form-control" name="content" id="content" rows="8"
+					cols="100" th:text="${result.content}">${result.content}</textarea>
+			</div>
+			<br>
+			<div>
+				WRITER<input class="form-control form-control-sm" name="writer"
+					id="writer" th:value="${result.writer}">
+			</div>
+			<br>
+			<div style="text-align: center;">
+				<input class="btn btn-primary" type="button" value="RETURN"
+					th:onclick="'window.location.href = \'' + @{/{id}/view(id=${result.id})} + '\''">
+				<input class="btn btn-primary" type="submit" value="SUBMIT">
+			</div>
+		</form>
+	</div>
+
+	<script type="text/javascript">
+
+    </script>
+
+</body>
+</html>

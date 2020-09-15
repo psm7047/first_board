@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{mg/layout/mgLayout}"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<meta charset="UTF-8">
+<title>VIEW</title>
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+</head>
+<body>
+	<script src="/js/jquery.js"></script>
+	<script src="/js/popper.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="/">BOARD</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarColor02">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarColor02">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link" href="/">Home
+				</a></li>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" id="dropdown"
+					data-toggle="dropdown">MEMBER</a>
+					<div class="dropdown-menu" aria-labelledby="dropdown">
+						<a class="dropdown-item" href="#">LOGIN</a> <a
+							class="dropdown-item" href="#">LOGOUT</a> <a
+							class="dropdown-item" href="#">SIGN UP</a>
+					</div></li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0">
+				<input class="form-control mr-sm-2" type="text" placeholder="Search">
+				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		</div>
+	</nav>
+	<br>
+
+	<div style="width: 70%; height: 100%; margin: auto;">
+		<legend style="text-align: left;">VIEW</legend>
+		<br>
+		<div class="card mb-3">
+			<h3 class="card-header" th:text="${result.title}"></h3>
+			<div style="height: 150px" class="card-body">
+				<p class="card-text" th:text="${result.content}"></p>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item" th:text="${result.writer}"></li>
+
+			</ul>
+			<div class="card-footer text-muted">2 days ago</div>
+		</div>
+		<br>
+		<div style="text-align: center">
+			<input type="button" class="btn btn-primary" value="RETURN"
+				onclick="location.href='/'"> <input type="button"
+				class="btn btn-primary" value="MODIFY"
+				th:onclick="'window.location.href = \'' + @{/{id}/update(id=${result.id})} + '\''">
+			<input type="button" class="btn btn-primary" value="DELETE"
+				th:onclick="'window.location.href = \'' + @{/{id}/delete.do(id=${result.id})} + '\''">
+		</div>
+		<br>
+		<legend style="text-align: left;">COMMENT</legend>
+		<br>
+		<form id="contentForm" name="contentForm" method="post">
+			<div style="width: 490px; border-top: 1px solid gold;">
+				<br>
+				<textarea class="form-control" id="commentContent"
+					name="commentContent" rows="8" cols="50"></textarea>
+				<input type="hidden" name="bno" th:value="${result.id}">
+			</div>
+			<br>
+			<div style="text-align: center">
+			<input type="button" class="btn btn-primary" value="SUBMIT"
+				th:attr="onclick=|javascript:commentInsert();|">
+				</div>
+		</form>
+		<br>
+		<div>comment list</div>
+		<form id='commentList' name='commentList' method='post'>
+			<div id="commentDiv" name="commentDiv">
+				<table class="table table-hover">
+					
+					<thead>
+					<tr>
+						<th scope="col">No</th>
+						<th scope="col" style="text-align: center;">Content</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="data,iterStat: ${commentList.commentList}">
+
+						<td th:text="${iterStat.index+1}"></td>
+						<td name="commentContent" id="comment"
+							th:text="${data.commentContent}"></td>
+						<td><input type="button" class="btn btn-primary btn-sm" value="delete"
+							th:attr="onclick=|javascript:commentDelete('${data.cno}');|"></td>
+						<td><input type="button" class="btn btn-primary btn-sm" value="modify"
+							th:attr="onclick=|javascript:commentUpdate('${data.cno}');|"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</form>
+	</div>
+
+
+	<th:block layout:fragment="script">
+		<script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript">
+			function commentInsert() {
+
+				var data = $('#contentForm').serialize();
+				console.log(data);
+				$
+						.ajax({
+							type : "POST",
+							dataType : 'json',
+							url : '[[@{/new}]]',
+							data : data,
+							success : function(data, status, xhr) {
+
+								if (data.flag === "success") {
+									$('#commentDiv').empty();
+
+									var str = "";
+
+									str += "<table class=\"table table-hover\">"
+											+ "<thead>"
+											+ "<tr>"
+											+ "<th scope=\"col\">No</th>"
+											+ "<th scope=\"col\" style=\"text-align:center;\">Content</th>"
+											+ "</tr>";
+											+ "</thead>"
+
+									var result = data.resultList;
+
+									for (var i = 0; i < result.length; i++) {
+										str += "<tbody>"
+												+ "<tr>"
+												+ "<td>"
+												+ (i + 1)
+												+ "</td>"
+												+ "<td>"
+												+ result[i].commentContent
+												+ "</td>"
+												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" value='delete' onclick=\"commentDelete('"
+												+ result[i].cno
+												+ "');\" ></td>"
+												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" value='modify' onclick=\"commentUpdate('"
+												+ result[i].cno
+												+ "');\"  ></td>" + "</tr>"
+												+ "</tbody>"
+
+									}
+									str += "</table>";
+
+									$('#commentDiv').append(str);
+									$('#commentContent').val("");
+
+								}
+
+							},
+							error : function(jqXHR, textStatus, errorThrown) {
+								alert(jqXHR.responseText);
+							}
+						});
+			}
+
+			function commentDelete(cno) {
+
+				var data = 'cno=' + cno;
+				console.log(data);
+
+				$
+						.ajax({
+							type : "DELETE",
+							dataType : 'json',
+							url : '[[@{/__${result.id}__}]]',
+							data : data,
+							success : function(data, status, xhr) {
+								console.log(data);
+								if (data.flag === "success") {
+									$('#commentDiv').empty();
+
+									var str = "";
+
+									str += "<table class=\"table table-hover\">"
+										+ "<thead>"
+										+ "<tr>"
+										+ "<th scope=\"col\">No</th>"
+										+ "<th scope=\"col\" style=\"text-align:center;\">Content</th>"
+										+ "</tr>";
+										+ "</thead>"
+
+									var result = data.resultList;
+
+									console.log(result);
+
+									for (var i = 0; i < result.length; i++) {
+										str += "<tbody>"
+												+"<tr>"
+												+ "<td>"
+												+ (i + 1)
+												+ "</td>"
+												+ "<td>"
+												+ result[i].commentContent
+												+ "</td>"
+												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" value='delete' onclick=\"commentDelete('"
+												+ result[i].cno
+												+ "');\" ></td>"
+												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" value='modify' onclick=\"commentUpdate('"
+												+ result[i].cno + "');\"></td>"
+												+ "</tr>"
+												+ "</tbody>";
+
+									}
+									str += "</table>";
+									console.log(str);
+									$('#commentDiv').append(str);
+									$('#commentContent').val("");
+
+								}
+							},
+							error : function(jqXHR, textStatus, errorThrown) {
+								alert(jqXHR.responseText);
+							}
+						});
+			}
+
+			function commentUpdate(cno) {
+				var str = "";
+				console.log(cno);
+
+			}
+
+			function doUpdateComment(cno) {
+				console.log(cno);
+			}
+
+			/* $(document).ready(function() {
+				$(".updateComment").click(function() {
+					
+					var str="";
+					var checkBtn=$(this);
+					
+					var tr= checkBtn.parent().parent();
+					var td=tr.children();
+			
+					var comment=td.eq(2).text();
+					console.log(commentList);
+				
+					
+					$(td.eq(2)).replaceWith('<td><input type="text" class="updateText" value="'+comment+'"  ></td>');
+					$(".updateComment").hide();
+					
+					str = "<td><input type='button' class='doUpdateComment' value='수정 완료'></td> ";   
+					
+					$('#commentDiv').append(str);
+					
+						 $(".doUpdateComment").click(function() {
+							 
+							 var data ="commentContent=" + $(".updateText").val();
+							 console.log(data);
+							
+							$.ajax({
+								type : "POST",
+								dataType : 'json',
+								url : '[[@{/update}]]',
+								data : data,
+								success : function(data, status, xhr) {
+									console.log(data);
+									if (data.flag === "success") {
+										$('#commentDiv').empty();
+
+										var str = "";
+
+										str += "<table>"
+												+ "<tr height='1' bgcolor='#dddddd'>"
+												+ "<td colspan='4' width='450'></td>"
+												+ "</tr>" + "<tr>"
+												+ "<td width='70'><input type='checkbox' name='checkAll' id='checkAll'>선택</td>"
+												+ "<td width='70'>번호</td>"
+												+ "<td width='400'>내용</td>"
+												+ "</tr>";
+
+										var result = data.resultList;
+
+										console.log(result);
+
+										for (var i = 0; i < result.length; i++) {
+											str += "<tr>"
+													+"<td><input type='checkbox' name='chk' ></td>"
+													+ "<td>"
+													+ (i + 1)
+													+ "</td>"
+													+ "<td>"
+													+ result[i].commentContent
+													+ "</td>" 
+													+ "<td><input type='button' value='삭제' onclick=\"commentDelete('" + result[i].cno + "');\" ></td>"
+													+ "<td><input type='button' class='updateComment' value='수정' ></td>"
+													+ "</tr>";
+
+										}
+										str += "</table>";
+
+										$('#commentDiv').append(str);
+										$('#commentContent').val("");
+
+									}
+								},
+								error : function(jqXHR, textStatus, errorThrown) {
+									alert(jqXHR.responseText);
+								}
+							});
+						}); 
+					});
+			}); */
+
+			$('input:checkbox[name=checkAll]').on('click', function() {
+				if ($("#checkAll").prop("checked")) {
+					$('input[name=chk]').prop("checked", true);
+				} else {
+					$('input[name=chk]').prop("checked", false);
+				}
+			});
+
+			$('input:checkbox[name=chk]').each(
+					function() {
+
+						$(this).on(
+								'click',
+								function() {
+									var allObj = $('[name=checkAll]');
+									var objName = $(this).attr("name");
+
+									if ($(this).prop("checked")) {
+										var checkBoxLength = $("[name="
+												+ objName + "]").length;
+										var checkLength = $("[name" + objName
+												+ "]:checked").length;
+
+										console.log(checkLength);
+
+										if (checkBoxLength == checkLength) {
+											allObj.prop("checked", true);
+										} else {
+											allObj.prop("checked", false);
+										}
+									} else {
+										allObj.prop("checked", false);
+									}
+								});
+					});
+		</script>
+	</th:block>
+
+</body>
+</html>

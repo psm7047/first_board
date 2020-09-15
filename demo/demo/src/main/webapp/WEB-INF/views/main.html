@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+body{
+	margin:100px;
+}
+table {
+	width: 100%;
+}
+
+table, th, td {
+	border: 1px solid #bcbcbc;
+}
+h2{
+	text-align : center;
+	margin-right:25px;
+}
+
+</style>
+</head>
+<body>
+<h2>게시판</h2>
+<table style="width:70%; height:100%; margin:auto; text-align: center;">
+		<tr>
+				<td width="70"><center>번호</center></td>
+				<td widht="400"><center>제목</center></td>
+				<td width="100"><center>글쓴이</center></td>
+			</tr>
+			<tr th:each="data,iterStat: ${result}">
+				<td th:text="${iterStat.index+1}"></td>
+				<td><a th:href="@{${data.id}+'/view'}" th:text="${data.title}"></a></td>
+				<td th:text="${data.writer}"></td>
+				
+			</tr>
+	</table>
+	<br></br>
+	<div class="button" align="center" style="margin-right:25px;" >
+			<input type="button" value="등록" onClick="location.href='/write'" ><br></br>
+			</div>
+	
+
+</body>
+</html>
