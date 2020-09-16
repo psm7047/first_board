@@ -97,12 +97,12 @@
 					<tbody>
 					<tr th:each="data,iterStat: ${commentList.commentList}">
 
-						<td th:text="${iterStat.index+1}"></td>
-						<td name="commentContent" id="comment"
+						<td th:text="${iterStat.index+1}" ></td>
+						<td name="commentContent" th:id="${data.cno}"
 							th:text="${data.commentContent}"></td>
-						<td><input type="button" class="btn btn-primary btn-sm" value="delete"
+						<td><input type="button" class="btn btn-primary btn-sm" id="deleteComment" value="delete"
 							th:attr="onclick=|javascript:commentDelete('${data.cno}');|"></td>
-						<td><input type="button" class="btn btn-primary btn-sm" value="modify"
+						<td><input type="button" class="btn btn-primary btn-sm" id="updateComment" value="modify"
 							th:attr="onclick=|javascript:commentUpdate('${data.cno}');|"></td>
 					</tr>
 					</tbody>
@@ -148,13 +148,15 @@
 												+ "<td>"
 												+ (i + 1)
 												+ "</td>"
-												+ "<td>"
+												+ "<td name ='commentContent' id="
+												+ result[i].cno
+												+">"
 												+ result[i].commentContent
 												+ "</td>"
-												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" value='delete' onclick=\"commentDelete('"
+												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='deleteComment' value='delete' onclick=\"commentDelete('"
 												+ result[i].cno
 												+ "');\" ></td>"
-												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" value='modify' onclick=\"commentUpdate('"
+												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='updateComment' value='modify' onclick=\"commentUpdate('"
 												+ result[i].cno
 												+ "');\"  ></td>" + "</tr>"
 												+ "</tbody>"
@@ -210,13 +212,15 @@
 												+ "<td>"
 												+ (i + 1)
 												+ "</td>"
-												+ "<td>"
+												+ "<td name ='commentContent' id="
+												+ result[i].cno
+												+">"
 												+ result[i].commentContent
 												+ "</td>"
-												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" value='delete' onclick=\"commentDelete('"
+												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='deleteComment' value='delete' onclick=\"commentDelete('"
 												+ result[i].cno
 												+ "');\" ></td>"
-												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" value='modify' onclick=\"commentUpdate('"
+												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='updateComment' value='modify' onclick=\"commentUpdate('"
 												+ result[i].cno + "');\"></td>"
 												+ "</tr>"
 												+ "</tbody>";
@@ -235,39 +239,24 @@
 						});
 			}
 
-			function commentUpdate(cno) {
-				var str = "";
-				console.log(cno);
-
-			}
-
-			function doUpdateComment(cno) {
-				console.log(cno);
-			}
-
-			/* $(document).ready(function() {
-				$(".updateComment").click(function() {
-					
+		function commentUpdate(cno) {
+					var selectComment = "#" + cno;
 					var str="";
-					var checkBtn=$(this);
+					var modifyComment=$(selectComment);
 					
-					var tr= checkBtn.parent().parent();
-					var td=tr.children();
-			
-					var comment=td.eq(2).text();
-					console.log(commentList);
-				
+					var originalComment=modifyComment.text();
 					
-					$(td.eq(2)).replaceWith('<td><input type="text" class="updateText" value="'+comment+'"  ></td>');
-					$(".updateComment").hide();
+					console.log(originalComment);
 					
-					str = "<td><input type='button' class='doUpdateComment' value='수정 완료'></td> ";   
 					
-					$('#commentDiv').append(str);
+					str = '<td><input type="text" id="updateText" value="'+originalComment+'"  ></td>'
+						+ '<td><input type="button" id="doUpdateComment" value="modify" class="btn btn-primary btn-sm"></td>';
 					
-						 $(".doUpdateComment").click(function() {
+					$(modifyComment).replaceWith(str);
+					
+						 $("#doUpdateComment").click(function() {
 							 
-							 var data ="commentContent=" + $(".updateText").val();
+							 var data ="commentContent=" + $("#updateText").val();
 							 console.log(data);
 							
 							$.ajax({
@@ -286,7 +275,6 @@
 												+ "<tr height='1' bgcolor='#dddddd'>"
 												+ "<td colspan='4' width='450'></td>"
 												+ "</tr>" + "<tr>"
-												+ "<td width='70'><input type='checkbox' name='checkAll' id='checkAll'>선택</td>"
 												+ "<td width='70'>번호</td>"
 												+ "<td width='400'>내용</td>"
 												+ "</tr>";
@@ -305,7 +293,7 @@
 													+ result[i].commentContent
 													+ "</td>" 
 													+ "<td><input type='button' value='삭제' onclick=\"commentDelete('" + result[i].cno + "');\" ></td>"
-													+ "<td><input type='button' class='updateComment' value='수정' ></td>"
+													+ "<td><input type='button' id='updateComment' value='수정' ></td>"
 													+ "</tr>";
 
 										}
@@ -321,44 +309,9 @@
 								}
 							});
 						}); 
-					});
-			}); */
+					}
+		
 
-			$('input:checkbox[name=checkAll]').on('click', function() {
-				if ($("#checkAll").prop("checked")) {
-					$('input[name=chk]').prop("checked", true);
-				} else {
-					$('input[name=chk]').prop("checked", false);
-				}
-			});
-
-			$('input:checkbox[name=chk]').each(
-					function() {
-
-						$(this).on(
-								'click',
-								function() {
-									var allObj = $('[name=checkAll]');
-									var objName = $(this).attr("name");
-
-									if ($(this).prop("checked")) {
-										var checkBoxLength = $("[name="
-												+ objName + "]").length;
-										var checkLength = $("[name" + objName
-												+ "]:checked").length;
-
-										console.log(checkLength);
-
-										if (checkBoxLength == checkLength) {
-											allObj.prop("checked", true);
-										} else {
-											allObj.prop("checked", false);
-										}
-									} else {
-										allObj.prop("checked", false);
-									}
-								});
-					});
 		</script>
 	</th:block>
 
