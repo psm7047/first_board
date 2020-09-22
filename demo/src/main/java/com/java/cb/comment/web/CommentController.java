@@ -58,7 +58,7 @@ public class CommentController {
 		comService.commentInsert(com);
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();	
-		
+		System.out.print(comService.selectCommentList(com));
 		List<Comment> resultList=comService.selectCommentList(com);
 		resultMap.put("resultList", resultList);
 		resultMap.put("flag", "success");
@@ -83,15 +83,15 @@ public class CommentController {
 			
 	}
 	
-	@PostMapping("/update")
+	@PostMapping("/{bno}")
 	@ResponseBody
 	public HashMap<String, Object> Update(Comment com) {
 		
 		comService.commentUpdate(com);
-		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();	
-		
+		System.out.print(com);
 		List<Comment> resultList=comService.selectCommentList(com);
+		
 		resultMap.put("resultList", resultList);
 		resultMap.put("flag", "success");
 					

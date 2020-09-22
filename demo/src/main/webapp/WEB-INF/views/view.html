@@ -126,7 +126,7 @@
 							url : '[[@{/new}]]',
 							data : data,
 							success : function(data, status, xhr) {
-
+								console.log(data);
 								if (data.flag === "success") {
 									$('#commentDiv').empty();
 
@@ -227,7 +227,7 @@
 
 									}
 									str += "</table>";
-									console.log(str);
+
 									$('#commentDiv').append(str);
 									$('#commentContent').val("");
 
@@ -248,7 +248,8 @@
 					
 					console.log(originalComment);
 					
-					
+					 document.getElementById("updateComment").style.display = "none";
+
 					str = '<td><input type="text" id="updateText" value="'+originalComment+'"  ></td>'
 						+ '<td><input type="button" id="doUpdateComment" value="modify" class="btn btn-primary btn-sm"></td>';
 					
@@ -256,13 +257,13 @@
 					
 						 $("#doUpdateComment").click(function() {
 							 
-							 var data ="commentContent=" + $("#updateText").val();
+							 var data ="commentContent=" + $("#updateText").val() + "&cno=" + cno;
 							 console.log(data);
 							
 							$.ajax({
 								type : "POST",
 								dataType : 'json',
-								url : '[[@{/update}]]',
+								url : '[[@{/__${result.id}__}]]',
 								data : data,
 								success : function(data, status, xhr) {
 									console.log(data);
@@ -271,30 +272,36 @@
 
 										var str = "";
 
-										str += "<table>"
-												+ "<tr height='1' bgcolor='#dddddd'>"
-												+ "<td colspan='4' width='450'></td>"
-												+ "</tr>" + "<tr>"
-												+ "<td width='70'>번호</td>"
-												+ "<td width='400'>내용</td>"
-												+ "</tr>";
+										str += "<table class=\"table table-hover\">"
+											+ "<thead>"
+											+ "<tr>"
+											+ "<th scope=\"col\">No</th>"
+											+ "<th scope=\"col\" style=\"text-align:center;\">Content</th>"
+											+ "</tr>";
+											+ "</thead>"
 
 										var result = data.resultList;
 
 										console.log(result);
 
 										for (var i = 0; i < result.length; i++) {
-											str += "<tr>"
-													+"<td><input type='checkbox' name='chk' ></td>"
+											str += "<tbody>"
+													+"<tr>"
 													+ "<td>"
 													+ (i + 1)
 													+ "</td>"
-													+ "<td>"
+													+ "<td name ='commentContent' id="
+													+ result[i].cno
+													+">"
 													+ result[i].commentContent
-													+ "</td>" 
-													+ "<td><input type='button' value='삭제' onclick=\"commentDelete('" + result[i].cno + "');\" ></td>"
-													+ "<td><input type='button' id='updateComment' value='수정' ></td>"
-													+ "</tr>";
+													+ "</td>"
+													+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='deleteComment' value='delete' onclick=\"commentDelete('"
+													+ result[i].cno
+													+ "');\" ></td>"
+													+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='updateComment' value='modify' onclick=\"commentUpdate('"
+													+ result[i].cno + "');\"></td>"
+													+ "</tr>"
+													+ "</tbody>";
 
 										}
 										str += "</table>";
