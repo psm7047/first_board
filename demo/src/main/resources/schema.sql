@@ -3,6 +3,7 @@ create table person (
 	,title varchar(50) not null
 	,writer varchar(20) not null
 	,content varchar(1000) not null
+  ,board_date DATE DEFAULT now()
 	,primary key(id)
 );
 

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import com.java.cb.comment.vo.Comment;
+import java.util.Date;
 
 public class User {
 
@@ -22,6 +23,8 @@ public class User {
 	@NotNull
 	@Size(min=1, max=500)
 	private String content;
+	
+	public Date board_date;
 	
 	private int idx;
 	
@@ -54,6 +57,12 @@ public class User {
 	}
 	public void setIdx(int idx) {
 		this.idx = idx;
+	}
+	public Date getDate() {
+		return board_date;
+	}
+	public void setDate(Date board_date) {
+		this.board_date = board_date;
 	}
 	
 	public List<Comment> commentList;

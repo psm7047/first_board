@@ -28,12 +28,10 @@
 		delete from person where id=#{id}
 </delete>
 
-<update id="boardUpdate" parameterType="com.java.cb.user.vo.User">
-		update person
+<update id="boardUpdate" parameterType="com.java.cb.user.vo.User">update person
 		   set title=#{title}
 		      ,writer=#{writer}
-		      ,content=#{content}
-		where id=#{id}
-</update>
+		,board_date= now()     ,content=#{content}
+		where id=#{id}</update>
 
 </mapper>

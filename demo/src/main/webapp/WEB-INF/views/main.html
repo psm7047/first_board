@@ -46,6 +46,7 @@
       <th scope="col">No</th>
       <th scope="col">Title</th>
       <th scope="col">Writer</th>
+      <th scope="col">Date</th>
     </tr>
   </thead>
   <tbody>
@@ -53,6 +54,7 @@
 				<td th:text="${iterStat.index+1}"></td>
 				<td><a th:href="@{${data.id}+'/view'}" th:text="${data.title}"></a></td>
 				<td th:text="${data.writer}"></td>
+				<td th:text="${#dates.format(data.board_date,'yyyy-MM-dd')}"></td>
 				
 			</tr>
 			</tbody>

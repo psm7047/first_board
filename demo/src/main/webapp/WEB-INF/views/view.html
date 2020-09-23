@@ -55,7 +55,7 @@
 				<li class="list-group-item" th:text="${result.writer}"></li>
 
 			</ul>
-			<div class="card-footer text-muted">2 days ago</div>
+			<div class="card-footer text-muted" th:text="${#dates.format(result.board_date,'yyyy-MM-dd')}"></div>
 		</div>
 		<br>
 		<div style="text-align: center">
@@ -102,8 +102,8 @@
 							th:text="${data.commentContent}"></td>
 						<td><input type="button" class="btn btn-primary btn-sm" id="deleteComment" value="delete"
 							th:attr="onclick=|javascript:commentDelete('${data.cno}');|"></td>
-						<td><input type="button" class="btn btn-primary btn-sm" id="updateComment" value="modify"
-							th:attr="onclick=|javascript:commentUpdate('${data.cno}');|"></td>
+						<td><input type="button" class="btn btn-primary btn-sm" th:id="|update${data.cno}|" value="modify"
+							th:attr="onclick=|javascript:commentUpdate('${data.cno}');|"  ></td>
 					</tr>
 					</tbody>
 				</table>
@@ -156,7 +156,7 @@
 												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='deleteComment' value='delete' onclick=\"commentDelete('"
 												+ result[i].cno
 												+ "');\" ></td>"
-												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='updateComment' value='modify' onclick=\"commentUpdate('"
+												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='update" + result[i].cno +"' value='modify' onclick=\"commentUpdate('"
 												+ result[i].cno
 												+ "');\"  ></td>" + "</tr>"
 												+ "</tbody>"
@@ -220,7 +220,8 @@
 												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='deleteComment' value='delete' onclick=\"commentDelete('"
 												+ result[i].cno
 												+ "');\" ></td>"
-												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='updateComment' value='modify' onclick=\"commentUpdate('"
+												+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='update" + result[i].cno
+												+ "' value='modify' onclick=\"commentUpdate('"
 												+ result[i].cno + "');\"></td>"
 												+ "</tr>"
 												+ "</tbody>";
@@ -243,19 +244,17 @@
 					var selectComment = "#" + cno;
 					var str="";
 					var modifyComment=$(selectComment);
-					
+					var modifyButtonId="#update" + cno;
+					var button = $(modifyButtonId)
+					console.log(modifyComment);
 					var originalComment=modifyComment.text();
-					
-					console.log(originalComment);
-					
-					 document.getElementById("updateComment").style.display = "none";
 
 					str = '<td><input type="text" id="updateText" value="'+originalComment+'"  ></td>'
 						+ '<td><input type="button" id="doUpdateComment" value="modify" class="btn btn-primary btn-sm"></td>';
-					
+					$(button).hide();
 					$(modifyComment).replaceWith(str);
 					
-						 $("#doUpdateComment").click(function() {
+						 $("#doUpdateComment").one("click", function() {
 							 
 							 var data ="commentContent=" + $("#updateText").val() + "&cno=" + cno;
 							 console.log(data);
@@ -298,7 +297,7 @@
 													+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='deleteComment' value='delete' onclick=\"commentDelete('"
 													+ result[i].cno
 													+ "');\" ></td>"
-													+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='updateComment' value='modify' onclick=\"commentUpdate('"
+													+ "<td><input type='button' class=\"btn btn-primary btn-sm\" id='update"+result[i].cno +"' value='modify' onclick=\"commentUpdate('"
 													+ result[i].cno + "');\"></td>"
 													+ "</tr>"
 													+ "</tbody>";
