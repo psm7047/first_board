@@ -1,10 +1,13 @@
 package com.java.cb.comment.vo;
+import java.util.Date;
 
 public class Comment {
 	
 	private int cno;
 	private int bno;
 	private String commentContent;
+	private Date commentDate;
+	
 	public int getCno() {
 		return cno;
 	}
@@ -22,6 +25,12 @@ public class Comment {
 	}
 	public void setCommentContent(String commentContent) {
 		this.commentContent = commentContent;
+	}
+	public Date getCommentDate() {
+		return commentDate;
+	}
+	public void setCommentDate(Date commentDate) {
+		this.commentDate = commentDate;
 	}
 	
 

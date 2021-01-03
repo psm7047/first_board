@@ -10,7 +10,8 @@ create table person (
 create table comment(
   cno integer not null primary key, 
   bno integer not null,    
-  commentContent varchar(100) not null, 
+  commentContent varchar(100) not null,
+  commentDate DATE DEFAULT now(),
   primary key(cno),
   foreign key(bno) references person(id) on delete cascade
 );

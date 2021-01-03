@@ -50,6 +50,17 @@ public class CommentController {
 		return comService.selectCommentList(com);
 	}
 	
+	@PostMapping("/showCommentList")
+	@ResponseBody
+	public HashMap<String, Object> Show(Comment com) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		List<Comment> resultList=comService.selectCommentList(com);
+		resultMap.put("resultList", resultList);
+		resultMap.put("flag", "success");
+					
+			return resultMap;
+	}
 	
 	@PostMapping("/new")
 	@ResponseBody
@@ -67,7 +78,7 @@ public class CommentController {
 			
 	}
 	
-	@DeleteMapping("/{bno}")
+	@DeleteMapping("/delete")
 	@ResponseBody
 	public HashMap<String, Object> Delete(Comment com) {
 		
@@ -83,7 +94,7 @@ public class CommentController {
 			
 	}
 	
-	@PostMapping("/{bno}")
+	@PostMapping("/update")
 	@ResponseBody
 	public HashMap<String, Object> Update(Comment com) {
 		
